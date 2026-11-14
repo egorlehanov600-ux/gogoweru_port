@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Лесная поляна — 3D-экшен · gogoweru</title>
+  <meta name="description" content="«Лесная поляна» от gogoweru: топор, пять костров, волны противников и ярость. Скачать игру и обложка.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🌲%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="../../css/style.css">
+  <style>
+    .game-hero {
+      padding: 70px 0 50px;
+      background:
+        radial-gradient(800px 380px at 10% -10%, rgba(126, 217, 87, .14), transparent 60%),
+        radial-gradient(700px 380px at 90% 10%, rgba(168, 85, 247, .12), transparent 60%),
+        var(--bg);
+      border-bottom: 1px solid var(--border);
+    }
+    .breadcrumbs { display: flex; gap: 8px; color: var(--muted); font-size: 14px; margin-bottom: 22px; flex-wrap: wrap; }
+    .breadcrumbs a:hover { color: var(--purple-bright); }
+    .breadcrumbs span { opacity: .5; }
+    .game-hero__title { font-size: clamp(34px, 6vw, 62px); font-weight: 900; letter-spacing: 4px; line-height: 1.05; margin-bottom: 8px; }
+    .game-hero__sub { color: var(--green); font-weight: 700; text-transform: uppercase; letter-spacing: 3px; font-size: 14px; margin-bottom: 22px; }
+    .game-hero__lead { color: var(--muted); font-size: 18px; max-width: 720px; margin-bottom: 28px; }
+    .game-hero__actions { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 34px; }
+    .facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 14px; max-width: 880px; }
+    .fact { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; }
+    .fact__label { display: block; color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 4px; }
+    .fact__value { font-weight: 800; font-size: 16px; }
+    .fact__value .green { color: var(--green); }
+    .fact__value .orange { color: var(--carrot); }
+    .fact__value .purple { color: var(--purple-bright); }
+
+    .prose { max-width: 760px; }
+    .prose h3 { font-size: 22px; margin: 34px 0 12px; display: flex; align-items: center; gap: 10px; }
+    .prose p { color: var(--muted); margin-bottom: 14px; font-size: 16px; }
+    .prose ul { list-style: none; display: grid; gap: 10px; margin-bottom: 16px; }
+    .prose li { color: var(--muted); padding-left: 28px; position: relative; font-size: 15.5px; }
+    .prose li::before { content: "🌲"; position: absolute; left: 0; top: 0; }
+    .prose strong { color: var(--text); }
+    .quote {
+      border-left: 4px solid var(--green);
+      background: rgba(126, 217, 87, .07);
+      padding: 16px 20px; border-radius: 0 12px 12px 0;
+      color: var(--text); font-size: 16px; margin: 22px 0;
+    }
+
+    .loop { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 16px; counter-reset: step; }
+    .loop__step { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 20px 18px 18px; position: relative; counter-increment: step; }
+    .loop__step::before {
+      content: counter(step);
+      position: absolute; top: -14px; left: 16px;
+      width: 30px; height: 30px; border-radius: 50%;
+      background: var(--green); color: #0c1a08;
+      font-weight: 900; display: grid; place-items: center; font-size: 15px;
+      box-shadow: 0 4px 12px rgba(126, 217, 87, .4);
+    }
+    .loop__step h4 { font-size: 15.5px; margin: 6px 0 6px; }
+    .loop__step p { color: var(--muted); font-size: 13.5px; }
+
+    .gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+    .shot { position: relative; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border); background: var(--surface); cursor: zoom-in; transition: transform .2s ease, border-color .2s ease; }
+    .shot:hover { transform: translateY(-4px); border-color: var(--green); }
+    .shot img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; }
+    .shot__caption { position: absolute; inset: auto 0 0 0; padding: 26px 16px 12px; background: linear-gradient(transparent, rgba(6, 9, 7, .92)); font-size: 13.5px; font-weight: 600; color: var(--text); }
+    .shot--soon {
+      display: grid; place-items: center; min-height: 220px; text-align: center;
+      color: var(--muted); font-size: 14.5px; padding: 24px;
+      background: repeating-linear-gradient(45deg, var(--surface-2), var(--surface-2) 14px, var(--surface) 14px, var(--surface) 28px);
+      cursor: default;
+    }
+    .shot--soon:hover { transform: none; border-color: var(--border); }
+
+    .dl-box {
+      display: grid; grid-template-columns: 1fr auto; gap: 26px; align-items: center;
+      background: linear-gradient(145deg, var(--surface), var(--surface-2));
+      border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 30px 32px; box-shadow: var(--shadow); max-width: 900px;
+    }
+    .dl-box h3 { font-size: 22px; margin-bottom: 8px; }
+    .dl-box p { color: var(--muted); font-size: 15px; }
+    .dl-box__btns { display: flex; flex-direction: column; gap: 12px; min-width: 260px; }
+    .dl-box__hint { text-align: center; color: var(--green); font-size: 13px; font-weight: 700; }
+
+    .lightbox { position: fixed; inset: 0; background: rgba(5, 8, 6, .92); display: none; align-items: center; justify-content: center; z-index: 100; padding: 4vh 4vw; cursor: zoom-out; }
+    .lightbox.open { display: flex; }
+    .lightbox img { max-width: 100%; max-height: 90vh; border-radius: 12px; border: 1px solid var(--border); box-shadow: var(--shadow); }
+
+    @media (max-width: 760px) {
+      .dl-box { grid-template-columns: 1fr; }
+      .dl-box__btns { min-width: 0; }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="container header__inner">
+      <a href="../../index.html" class="logo">
+        <span class="logo__icon">🌲</span>
+        <span class="logo__text">gogoweru</span>
+      </a>
+      <nav class="nav" id="nav">
+        <a href="../../index.html#games" class="nav__link">Игры</a>
+        <a href="../../index.html#about" class="nav__link">Обо мне</a>
+        <a href="../../index.html#contacts" class="nav__link">Контакты</a>
+      </nav>
+      <button class="burger" id="burger" aria-label="Меню"><span></span><span></span><span></span></button>
+    </div>
+  </header>
+
+  <section class="game-hero">
+    <div class="container">
+      <nav class="breadcrumbs">
+        <a href="../../index.html">Главная</a><span>/</span>
+        <a href="../../index.html#games">Игры</a><span>/</span>
+        <b style="color:var(--text)">Лесная поляна</b>
+      </nav>
+
+      <h1 class="game-hero__title">ЛЕСНАЯ ПОЛЯНА</h1>
+      <p class="game-hero__sub">3D-экшен · топор · пять костров · ярость</p>
+      <p class="game-hero__lead">
+        Ночной лес, топор в руках и пять костров, которые нужно зажечь друг за другом.
+        Волны противников ломятся на поляну, Леша шепчет свои фразы, а способность
+        «Ярость» на ПКМ превращает заход в мясорубку. Прокачай топор до 4 уровня
+        и доведи дело до финального огня!
+      </p>
+
+      <div class="game-hero__actions">
+        <a href="lesnaya-polyanka.zip" download class="btn btn--primary">⬇ Скачать игру</a>
+        <a href="https://drive.google.com/file/d/1KcJ4ke9WCpMohrjHQkQJYQWkW3WOnAJj/view?usp=sharing" target="_blank" rel="noopener" class="btn btn--ghost">☁ Google Drive</a>
+        <a href="#gallery" class="btn btn--ghost">📸 Галерея</a>
+        <a href="#about" class="btn btn--ghost">📖 Описание</a>
+      </div>
+
+      <div class="facts">
+        <div class="fact"><span class="fact__label">Жанр</span><span class="fact__value">3D-экшен</span></div>
+        <div class="fact"><span class="fact__label">Платформа</span><span class="fact__value">Windows <span class="green">PC</span></span></div>
+        <div class="fact"><span class="fact__label">Движок</span><span class="fact__value">Unity 2021.3</span></div>
+        <div class="fact"><span class="fact__label">Размер файла</span><span class="fact__value"><span class="orange">45 МБ</span> (zip)</span></div>
+        <div class="fact"><span class="fact__label">Цель</span><span class="fact__value"><span class="green">5 костров</span> + счётчик убийств</span></div>
+        <div class="fact"><span class="fact__label">Статус</span><span class="fact__value"><span class="green">Скачать и играть</span></span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="about">
+    <div class="container prose">
+      <h2 class="section__title"><span class="section__num">01</span> Об игре</h2>
+
+      <div class="quote">
+        «Пять костров, топор в руках и шёпот Лешего. Зажги всё — и выведи поляну из тьмы.»
+      </div>
+
+      <p>
+        <strong>«Лесная поляна»</strong> — 3D-экшен на Unity, где ты берёшь топор и выходишь
+        на поляну в центре леса. Здесь нет длинного сюжета — только чистый цикл:
+        <strong>бей, прокачивай, зажигай костры</strong>. Игра начинается с обучения,
+        дальше — основной заход, а в конце ждет сцена победы с финальным костром.
+      </p>
+      <p>
+        Противники <strong>спавнятся волнами</strong> по точкам вокруг поляны: одни убегают,
+        другие лезут в бой и наносят урон — следи за здоровьем. За каждое поражение
+        продвигается общий счётчик: GameManager следит, сколько NPC уже повержено,
+        и не откроет финал, пока не набрано нужное число.
+      </p>
+      <p>
+        Главный инструмент — <strong>топор с 4 уровнями прокачки</strong>: с каждым уровнем
+        растёт урон, а на третьем — скорость атаки удваивается. А когда совсем туго,
+        включай <strong>«Ярость» (правая кнопка мыши)</strong>: на несколько секунд урон
+        и скорость взлетают вверх, кулдаун и статус способности видны на экране.
+        Пока ярость копится — бей аккуратнее, дождись готовности.
+      </p>
+      <p>
+        Атмосферу задают <strong>фразы Лешего</strong> — лесной дух комментирует происходящее
+        (громкость его реплик настраивается отдельно в настройках звука вместе
+        с музыкой, шагами и звуками атак).
+      </p>
+
+      <h3>🎮 Игровой цикл</h3>
+      <div class="loop">
+        <div class="loop__step">
+          <h4>🪓 Бей волны</h4>
+          <p>Противники спавнятся вокруг поляны — отбивайся топором.</p>
+        </div>
+        <div class="loop__step">
+          <h4>⬆ Прокачай топор</h4>
+          <p>4 уровня: урон растёт, на 3-м уровне скорость атаки ×2.</p>
+        </div>
+        <div class="loop__step">
+          <h4>🔥 Зажги костры</h4>
+          <p>Пять костров по очереди — пятый открывает финал.</p>
+        </div>
+        <div class="loop__step">
+          <h4>😈 Включи ярость</h4>
+          <p>ПКМ: временные множители урона и скорости, потом кулдаун.</p>
+        </div>
+        <div class="loop__step">
+          <h4>🏆 Сцена победы</h4>
+          <p>Набери убийства и зажги финальный огонь — финал.</p>
+        </div>
+      </div>
+
+      <h3>🕹 Управление</h3>
+      <ul>
+        <li><strong>WASD / стрелки + мышь</strong> — движение и обзор.</li>
+        <li><strong>ПКМ</strong> — способность «Ярость» (пока не «ГОТОВО», жди).</li>
+        <li><strong>Бег, присед, прыжок</strong> — есть встроенный контроллер персонажа.</li>
+        <li>Точные клавиши подскажет <strong>встроенное обучение</strong> — сцена обучения в меню.</li>
+      </ul>
+
+      <h3>✨ Что внутри</h3>
+      <ul>
+        <li><strong>5 костров</strong> — ядро прогресса, финальный огонь закрывает заход.</li>
+        <li><strong>Топор 4 уровней</strong> — ощутимая прокачка урона и скорости атаки.</li>
+        <li><strong>Ярость</strong> — способность на ПКМ с кулдауном и индикатором.</li>
+        <li><strong>Волны NPC</strong> — спавн по точкам, зоны, урон по игроку, оптимизация трупов.</li>
+        <li><strong>Фразы Лешего</strong> — озвучка и текст реплик духа леса.</li>
+        <li><strong>Меню, обучение, настройки</strong> — громкость музыки, реплик, атаки и шагов.</li>
+      </ul>
+
+      <h3>🖥 Как запустить</h3>
+      <ul>
+        <li>Скачай архив <strong>lesnaya-polyanka.zip</strong> (45 МБ) кнопкой выше.</li>
+        <li>Распакуй в любую папку (внутри папка <strong>лесная поляна</strong>).</li>
+        <li>Запусти <strong>лесная поляна\leshiu.exe</strong> — и жми «Играть» в меню.</li>
+      </ul>
+      <p><strong>Требования:</strong> Windows 10/11 (64-bit), любой современный ПК. Интернет не нужен.</p>
+    </div>
+  </section>
+
+  <section class="section section--alt" id="gallery">
+    <div class="container">
+      <h2 class="section__title"><span class="section__num">02</span> Галерея</h2>
+      <p class="section__lead">Обложка и скриншоты из игры: титул, меню, ночной лес и Леша у костра.</p>
+      <div class="gallery">
+        <figure class="shot" onclick="openLightbox(this)">
+          <img src="../../images/polyanka-cover.png" alt="Обложка игры Лесная поляна">
+          <figcaption class="shot__caption">Обложка — ночной лес, пять костров и топор</figcaption>
+        </figure>
+        <figure class="shot" onclick="openLightbox(this)">
+          <img src="../../images/polyanka-01-title.png" alt="Титульный экран Лесной поляны">
+          <figcaption class="shot__caption">Титульный экран</figcaption>
+        </figure>
+        <figure class="shot" onclick="openLightbox(this)">
+          <img src="../../images/polyanka-02-menu.png" alt="Главное меню: Играть, Управление, Выйти">
+          <figcaption class="shot__caption">Главное меню</figcaption>
+        </figure>
+        <figure class="shot" onclick="openLightbox(this)">
+          <img src="../../images/polyanka-03-axe.png" alt="Ночной лес — топор в стволе дерева">
+          <figcaption class="shot__caption">Топор в стволе — ночной лес</figcaption>
+        </figure>
+        <figure class="shot" onclick="openLightbox(this)">
+          <img src="../../images/polyanka-04-lesha.png" alt="Леша у костра на поляне">
+          <figcaption class="shot__caption">Леша у костра</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="download">
+    <div class="container">
+      <h2 class="section__title"><span class="section__num">03</span> Скачать</h2>
+      <div class="dl-box">
+        <div>
+          <h3>⬇ lesnaya-polyanka.zip</h3>
+          <p>
+            Полный билд для Windows: распакуй архив и запусти
+            <code>лесная поляна/leshiu.exe</code>. Тот же файл лежит на Google Drive.
+          </p>
+        </div>
+        <div class="dl-box__btns">
+          <a href="lesnaya-polyanka.zip" download class="btn btn--primary">⬇ Скачать с сайта · 45 МБ</a>
+          <a href="https://drive.google.com/file/d/1KcJ4ke9WCpMohrjHQkQJYQWkW3WOnAJj/view?usp=sharing" target="_blank" rel="noopener" class="btn btn--ghost">☁ Открыть на Google Drive</a>
+          <span class="dl-box__hint">ZIP · Windows · Unity</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container footer__inner">
+      <span>© 2026 <strong>gogoweru</strong> — портфолио разработчика игр</span>
+      <span class="footer__hint">Игра «Лесная поляна» · Windows · Unity</span>
+    </div>
+  </footer>
+
+  <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+    <img id="lightbox-img" src="" alt="Скриншот во весь экран">
+  </div>
+
+  <script src="../../js/main.js"></script>
+</body>
+</html>

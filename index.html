@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>gogoweru — портфолио разработчика игр</title>
+  <meta name="description" content="Портфолио инди-разработчика игр gogoweru: игры, скриншоты, описание и скачивание.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8C%BE%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- ============ ШАПКА ============ -->
+  <header class="header">
+    <div class="container header__inner">
+      <a href="index.html" class="logo">
+        <span class="logo__icon">🌾</span>
+        <span class="logo__text">gogoweru</span>
+      </a>
+      <nav class="nav" id="nav">
+        <a href="#games" class="nav__link">Игры</a>
+        <a href="#about" class="nav__link">Обо мне</a>
+        <a href="#contacts" class="nav__link">Контакты</a>
+      </nav>
+      <button class="burger" id="burger" aria-label="Меню">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ============ ГЛАВНЫЙ ЭКРАН ============ -->
+  <section class="hero">
+    <div class="container hero__inner">
+      <div class="hero__content">
+        <p class="hero__eyebrow">Инди-разработчик игр</p>
+        <h1 class="hero__title">Привет, я <span class="accent">gogoweru</span></h1>
+        <p class="hero__subtitle">
+          Делаю игры целиком сам: геймплей, 3D-мир, интерфейсы и всё остальное.
+          Здесь — мои проекты, скриншоты и файлы для скачивания.
+        </p>
+        <div class="hero__actions">
+          <a href="#games" class="btn btn--primary">Смотреть игры</a>
+          <a href="games/farm/index.html" class="btn btn--ghost">⚔️ Играть в «Ферму»</a>
+        </div>
+      </div>
+
+      <div class="hero__card">
+        <div class="hero__preview">
+          <img src="images/farm-03-field.png" alt="Из игры «Ферма» — грядки с морковью у амбара">
+          <span class="hero__badge">Новая игра</span>
+        </div>
+        <div class="hero__meta">
+          <h3>ФЕРМА</h3>
+          <p>Симулятор фермы со скелетом Костяном</p>
+          <a href="games/farm/index.html" class="btn btn--small btn--primary">Открыть страницу →</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero__shine" aria-hidden="true"></div>
+  </section>
+
+  <!-- ============ ИГРЫ ============ -->
+  <section class="section" id="games">
+    <div class="container">
+      <h2 class="section__title"><span class="section__num">01</span> Мои игры</h2>
+      <p class="section__lead">Пять игр — все скачиваются кнопкой на странице каждой игры.</p>
+
+      <div class="games">
+        <!-- ===== КАРТОЧКА ИГРЫ: ФЕРМА ===== -->
+        <article class="game-card">
+          <a class="game-card__media" href="games/farm/index.html">
+            <img src="images/farm-01-menu.png" alt="Главное меню игры «Ферма»">
+            <span class="game-card__platform">Windows</span>
+          </a>
+
+          <div class="game-card__body">
+            <div class="game-card__tags">
+              <span class="tag tag--green">3D-симулятор</span>
+              <span class="tag">Unity</span>
+              <span class="tag">Инди</span>
+            </div>
+
+            <h3 class="game-card__title">ФЕРМА — симулятор фермы</h3>
+
+            <p class="game-card__desc">
+              Помоги скелету Костяну вести ферму: он сам вырастить урожай не может —
+              у него пустые глазницы, он ничего не видит. Зато у него есть семена и сундук
+              с монетами. Покупай семена, сажай морковь на грядки, собирай урожай и продавай
+              его обратно Костяну. Вкладывай прибыль в улучшения и расширяй ферму
+              до 36 полей!
+            </p>
+
+            <ul class="game-card__facts">
+              <li>🧟 Герой: скелет Костян</li>
+              <li>🥕 Цикл: семена → морковь → монеты</li>
+              <li>📦 Файл: Farm-Windows.zip · 62 МБ</li>
+            </ul>
+
+            <div class="game-card__actions">
+              <a href="games/farm/index.html" class="btn btn--primary btn--small">Подробнее</a>
+              <a href="games/farm/Farm-Windows.zip" download class="btn btn--ghost btn--small">⬇ Скачать игру</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- ===== КРУТОЙ ПОВОРОТ ===== -->
+        <article class="game-card">
+          <a href="games/turn/index.html" class="game-card__media">
+            <img src="images/turn-01-hero.png" alt="Крутой поворот — гоночная игра">
+            <span class="game-card__platform">Джем 2026</span>
+          </a>
+          <div class="game-card__body">
+            <div class="game-card__tags">
+              <span class="tag">Гонка</span>
+              <span class="tag tag--green">Команда</span>
+              <span class="tag tag--dim">Siberian Game Jam</span>
+            </div>
+            <h3 class="game-card__title">КРУТОЙ ПОВОРОТ</h3>
+            <p class="game-card__desc">
+              Ты — не пилот, а руль! Машина едет сама, камеры наблюдения переключают ракурсы,
+              а твоя задача — вовремя крутить баранку. Оранжевые тыквы подсказывают траекторию
+              и служат валютой для новых рулей. Команда <strong>ЗамороJAMные</strong>, 72 часа джема.
+            </p>
+            <ul class="game-card__facts">
+              <li>🎃 Герой: оператор руля</li>
+              <li>📹 Камеры наблюдения меняют ракурс</li>
+              <li>🎮 Тема: камеры · Элемент: тыква</li>
+            </ul>
+            <div class="game-card__actions">
+              <a href="games/turn/index.html" class="btn btn--primary btn--small">Подробнее</a>
+              <a href="https://naspeh.tech/games/xzxslava/dev" target="_blank" rel="noopener" class="btn btn--ghost btn--small">⬇ Скачать / Играть</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- ===== ЛЕСНАЯ ПОЛЯНА ===== -->
+        <article class="game-card">
+          <a href="games/polyanka/index.html" class="game-card__media">
+            <img src="images/polyanka-cover.png" alt="Лесная поляна — обложка">
+            <span class="game-card__platform">Windows</span>
+          </a>
+          <div class="game-card__body">
+            <div class="game-card__tags">
+              <span class="tag tag--green">3D-экшен</span>
+              <span class="tag">Unity</span>
+              <span class="tag">Одиночная</span>
+            </div>
+            <h3 class="game-card__title">ЛЕСНАЯ ПОЛЯНА</h3>
+            <p class="game-card__desc">
+              Топор в руках, пять костров и волны противников на поляне в центре ночного леса.
+              Прокачай топор до 4 уровня, включай «Ярость» на ПКМ и зажигай костры один за другим —
+              пятый откроет финал. Леша шепчет свои фразы по ходу захода.
+            </p>
+            <ul class="game-card__facts">
+              <li>🪓 Топор: 4 уровня прокачки</li>
+              <li>🔥 Цель: 5 костров + счётчик убийств</li>
+              <li>📦 Файл: lesnaya-polyanka.zip · 45 МБ</li>
+            </ul>
+            <div class="game-card__actions">
+              <a href="games/polyanka/index.html" class="btn btn--primary btn--small">Подробнее</a>
+              <a href="games/polyanka/lesnaya-polyanka.zip" download class="btn btn--ghost btn--small">⬇ Скачать игру</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- ===== БОБИ ===== -->
+        <article class="game-card">
+          <a href="games/bobi/index.html" class="game-card__media">
+            <img src="images/bobi-01-menu.png" alt="Боби — главное меню">
+            <span class="game-card__platform">Windows</span>
+          </a>
+          <div class="game-card__body">
+            <div class="game-card__tags">
+              <span class="tag">Аркада</span>
+              <span class="tag tag--green">3 режима</span>
+              <span class="tag">Unity</span>
+            </div>
+            <h3 class="game-card__title">БОБИ — курьер пустыни</h3>
+            <p class="game-card__desc">
+              Ты — Борик, робот-доставщик посреди бескрайней пустыни. Забери груз
+              и верни его на точку старта. Дорога не идёт напрямик: горы, стены и палящее солнце.
+              Выбирай между тремя режимами — ходок, мотоцикл или полёт — и стань легендой пустыни.
+            </p>
+            <ul class="game-card__facts">
+              <li>🤖 Герой: робот Борик</li>
+              <li>🚶🏍✈ Режимы: ходок, мотоцикл, полёт</li>
+              <li>📦 Файл: Bobi-Windows.zip · 58 МБ</li>
+            </ul>
+            <div class="game-card__actions">
+              <a href="games/bobi/index.html" class="btn btn--primary btn--small">Подробнее</a>
+              <a href="games/bobi/Bobi-Windows.zip" download class="btn btn--ghost btn--small">⬇ Скачать игру</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- ===== ГРОБОВЩИК ===== -->
+        <article class="game-card">
+          <a href="games/grobovshik/index.html" class="game-card__media">
+            <img src="images/grob-01-hero.png" alt="Гробовщик — кладбище забытых мемов">
+            <span class="game-card__platform">Команда</span>
+          </a>
+          <div class="game-card__body">
+            <div class="game-card__tags">
+              <span class="tag">Хоррор + карточки</span>
+              <span class="tag tag--green">Команда</span>
+              <span class="tag tag--dim">ЗамороJAMные</span>
+            </div>
+            <h3 class="game-card__title">ГРОБОВЩИК</h3>
+            <p class="game-card__desc">
+              Раскопай забытые мемы, реши их судьбу и собери коллекцию.
+              Копай могилы лопатой, выбирай: убить мем ради лайков или оживить его в свою колоду,
+              дерись с враждебными мемами в пошаговых боях и находи боссов.
+              Команда <strong>ЗамороJAMные</strong>.
+            </p>
+            <ul class="game-card__facts">
+              <li>⚖️ Выбор: убить (+10) или оживить (−15)</li>
+              <li>🃏 Пошаговые карточные бои</li>
+              <li>📦 Файл: Grobovshik-Windows.zip · 68 МБ</li>
+            </ul>
+            <div class="game-card__actions">
+              <a href="games/grobovshik/index.html" class="btn btn--primary btn--small">Подробнее</a>
+              <a href="games/grobovshik/Grobovshik-Windows.zip" download class="btn btn--ghost btn--small">⬇ Скачать игру</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- ===== ЗАГЛУШКА СЛЕДУЮЩИХ ИГР ===== -->
+        <article class="game-card game-card--soon">
+          <div class="game-card__media game-card__soon">
+            <span class="game-card__soon-icon">🎮</span>
+            <span class="game-card__platform">Скоро</span>
+          </div>
+          <div class="game-card__body">
+            <div class="game-card__tags">
+              <span class="tag tag--dim">В разработке</span>
+            </div>
+            <h3 class="game-card__title">Следующая игра</h3>
+            <p class="game-card__desc">
+              Сюда встанет новая игра: достаточно положить скриншоты в <code>images/</code>,
+              файл игры в <code>games/</code> и добавить карточку.
+            </p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ОБО МНЕ ============ -->
+  <section class="section section--alt" id="about">
+    <div class="container">
+      <h2 class="section__title"><span class="section__num">02</span> Обо мне</h2>
+
+      <div class="about">
+        <div class="about__avatar" aria-hidden="true">🛠️</div>
+        <div class="about__text">
+          <p>
+            Я — <strong>gogoweru</strong>, независимый разработчик игр. Делаю всё сам:
+            придумываю идеи, программирую, моделирую 3D-мир, рисую интерфейсы и собираю билды.
+          </p>
+          <p>
+            Люблю низкополигональную стилистику, тёплые истории и понятный игровой цикл,
+            который затягивает: «ещё одна грядка, ещё одна продажа…».
+          </p>
+
+          <div class="about__skills">
+            <span class="skill">Unity</span>
+            <span class="skill">C#</span>
+            <span class="skill">3D-моделирование</span>
+            <span class="skill">Гейм-дизайн</span>
+            <span class="skill">UI/UX</span>
+            <span class="skill">Сборка билдов</span>
+          </div>
+
+          <p class="about__note">
+            ⚠️ Список навыков — черновик: скажи, что убрать или добавить, и я поправлю.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ КОНТАКТЫ ============ -->
+  <section class="section" id="contacts">
+    <div class="container">
+      <h2 class="section__title"><span class="section__num">03</span> Контакты</h2>
+      <div class="contacts">
+        <a class="contacts__card" href="https://vk.ru/gogoweru" target="_blank" rel="noopener">
+          <span class="contacts__icon">👤</span>
+          <h3>ВКонтакте</h3>
+          <p>Основная площадка — пиши в личные сообщения.</p>
+          <div class="contacts__placeholder">vk.ru/gogoweru</div>
+        </a>
+        <a class="contacts__card" href="https://t.me/GGogoweru" target="_blank" rel="noopener">
+          <span class="contacts__icon">✈️</span>
+          <h3>Telegram</h3>
+          <p>Быстрый способ связаться — напиши напрямую.</p>
+          <div class="contacts__placeholder">@GGogoweru</div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ПОДВАЛ ============ -->
+  <footer class="footer">
+    <div class="container footer__inner">
+      <span>© 2026 <strong>gogoweru</strong> — портфолио разработчика игр</span>
+      <span class="footer__hint">Сделано с 🥕 и без компромиссов</span>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

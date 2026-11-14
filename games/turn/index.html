@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Крутой поворот — гоночный симулятор · gogoweru</title>
+  <meta name="description" content="«Крутой поворот» от команды ЗамороJAMные: управляем рулём, не машиной. Создано на Siberian Game Jam 2026. Скриншоты и описание.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🎃%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="../../css/style.css">
+  <style>
+    .game-hero {
+      padding: 70px 0 50px;
+      background:
+        radial-gradient(800px 380px at 10% -10%, rgba(255, 140, 66, .14), transparent 60%),
+        radial-gradient(700px 380px at 90% 10%, rgba(126, 217, 87, .10), transparent 60%),
+        var(--bg);
+      border-bottom: 1px solid var(--border);
+    }
+    .breadcrumbs {
+      display: flex; gap: 8px;
+      color: var(--muted); font-size: 14px; margin-bottom: 22px; flex-wrap: wrap;
+    }
+    .breadcrumbs a:hover { color: var(--green); }
+    .breadcrumbs span { opacity: .5; }
+
+    .game-hero__title {
+      font-size: clamp(36px, 6vw, 64px);
+      font-weight: 900; letter-spacing: 6px; line-height: 1.05; margin-bottom: 8px;
+    }
+    .game-hero__sub {
+      color: var(--carrot); font-weight: 700; text-transform: uppercase;
+      letter-spacing: 3px; font-size: 14px; margin-bottom: 22px;
+    }
+    .game-hero__lead {
+      color: var(--muted); font-size: 18px; max-width: 720px; margin-bottom: 28px;
+    }
+    .game-hero__actions { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 34px; }
+
+    .facts {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 14px; max-width: 860px;
+    }
+    .fact {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; padding: 14px 16px;
+    }
+    .fact__label {
+      display: block; color: var(--muted); font-size: 12px;
+      text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 4px;
+    }
+    .fact__value { font-weight: 800; font-size: 16px; }
+    .fact__value .green { color: var(--green); }
+    .fact__value .orange { color: var(--carrot); }
+
+    .gallery {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;
+    }
+    .shot {
+      position: relative; border-radius: var(--radius); overflow: hidden;
+      border: 1px solid var(--border); background: var(--surface);
+      cursor: zoom-in; transition: transform .2s ease, border-color .2s ease;
+    }
+    .shot:hover { transform: translateY(-4px); border-color: var(--green); }
+    .shot img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; }
+    .shot__caption {
+      position: absolute; inset: auto 0 0 0;
+      padding: 26px 16px 12px;
+      background: linear-gradient(transparent, rgba(6, 9, 7, .92));
+      font-size: 13.5px; font-weight: 600; color: var(--text);
+    }
+
+    .loop {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 16px;
+      counter-reset: step;
+    }
+    .loop__step {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 14px;
+      padding: 20px 18px 18px; position: relative; counter-increment: step;
+    }
+    .loop__step::before {
+      content: counter(step);
+      position: absolute; top: -14px; left: 16px;
+      width: 30px; height: 30px; border-radius: 50%;
+      background: var(--carrot); color: #240a02;
+      font-weight: 900; display: grid; place-items: center; font-size: 15px;
+      box-shadow: 0 4px 12px rgba(255, 140, 66, .4);
+    }
+    .loop__step h4 { font-size: 15.5px; margin: 6px 0 6px; }
+    .loop__step p { color: var(--muted); font-size: 13.5px; }
+
+    .prose { max-width: 760px; }
+    .prose h3 {
+      font-size: 22px; margin: 34px 0 12px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .prose p { color: var(--muted); margin-bottom: 14px; font-size: 16px; }
+    .prose ul { list-style: none; display: grid; gap: 10px; margin-bottom: 16px; }
+    .prose li {
+      color: var(--muted); padding-left: 28px; position: relative; font-size: 15.5px;
+    }
+    .prose li::before {
+      content: "🎃"; position: absolute; left: 0; top: 0;
+    }
+    .prose strong { color: var(--text); }
+
+    .quote {
+      border-left: 4px solid var(--carrot);
+      background: rgba(255, 140, 66, .07);
+      padding: 16px 20px; border-radius: 0 12px 12px 0;
+      color: var(--text); font-size: 16px; margin: 22px 0;
+    }
+
+    .team-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;
+    }
+    .member {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 14px; padding: 20px; text-align: center;
+    }
+    .member__name { font-weight: 800; font-size: 17px; margin-bottom: 4px; }
+    .member__role { color: var(--carrot); font-size: 14px; font-weight: 700; }
+
+    .lightbox {
+      position: fixed; inset: 0; background: rgba(5, 8, 6, .92);
+      display: none; align-items: center; justify-content: center;
+      z-index: 100; padding: 4vh 4vw; cursor: zoom-out;
+    }
+    .lightbox.open { display: flex; }
+    .lightbox img {
+      max-width: 100%; max-height: 90vh; border-radius: 12px;
+      border: 1px solid var(--border); box-shadow: var(--shadow);
+    }
+
+    /* --- встроенный плеер игры --- */
+    .play-frame {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      min-height: 420px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      background: #05030a;
+      box-shadow: var(--shadow);
+    }
+    .play-frame iframe {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      border: 0; display: block;
+    }
+    .play-note {
+      margin-top: 14px;
+      color: var(--muted);
+      font-size: 14px;
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
+    .play-note b { color: var(--purple-bright); }
+
+    /* --- блок скачивания --- */
+    .dl-box {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 26px;
+      align-items: center;
+      background: linear-gradient(145deg, var(--surface), var(--surface-2));
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 30px 32px;
+      box-shadow: var(--shadow);
+      max-width: 900px;
+    }
+    .dl-box h3 { font-size: 22px; margin-bottom: 8px; }
+    .dl-box p { color: var(--muted); font-size: 15px; }
+    .dl-box__btns { display: flex; flex-direction: column; gap: 12px; min-width: 250px; }
+    .dl-box__hint {
+      text-align: center; color: var(--purple-bright);
+      font-size: 13px; font-weight: 700;
+    }
+    @media (max-width: 760px) {
+      .dl-box { grid-template-columns: 1fr; }
+      .dl-box__btns { min-width: 0; }
+      .play-frame { min-height: 300px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="container header__inner">
+      <a href="../../index.html" class="logo">
+        <span class="logo__icon">🎃</span>
+        <span class="logo__text">gogoweru</span>
+      </a>
+      <nav class="nav" id="nav">
+        <a href="../../index.html#games" class="nav__link">Игры</a>
+        <a href="../../index.html#about" class="nav__link">Обо мне</a>
+        <a href="../../index.html#contacts" class="nav__link">Контакты</a>
+      </nav>
+      <button class="burger" id="burger" aria-label="Меню">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <section class="game-hero">
+    <div class="container">
+      <nav class="breadcrumbs">
+        <a href="../../index.html">Главная</a><span>/</span>
+        <a href="../../index.html#games">Игры</a><span>/</span>
+        <b style="color:var(--text)">Крутой поворот</b>
+      </nav>
+
+      <h1 class="game-hero__title">КРУТОЙ ПОВОРОТ</h1>
+      <p class="game-hero__sub">Гоночный симулятор · команда ЗамороJAMные</p>
+      <p class="game-hero__lead">
+        Ты не пилот. Ты — руль. Машина несётся сама, камеры наблюдения переключают ракурсы,
+        а твоя задача — вовремя и в правильную сторону крутить баранку, чтобы войти в поворот.
+      </p>
+      <div class="game-hero__actions">
+        <a href="https://naspeh.tech/games/xzxslava/dev" target="_blank" rel="noopener" class="btn btn--primary">⬇ Скачать / Играть онлайн</a>
+        <a href="#play" class="btn btn--ghost">🎮 Играть прямо на сайте</a>
+        <a href="#gallery" class="btn btn--ghost">📸 Скриншоты</a>
+        <a href="#about" class="btn btn--ghost">📖 Описание</a>
+      </div>
+
+      <div class="facts">
+        <div class="fact"><span class="fact__label">Джем</span><span class="fact__value"><span class="green">Siberian Game Jam 2026</span></span></div>
+        <div class="fact"><span class="fact__label">Тема</span><span class="fact__value"><span class="orange">Камеры наблюдения</span></span></div>
+        <div class="fact"><span class="fact__label">Команда</span><span class="fact__value">Заморо<span class="orange">JAM</span>ные</span></div>
+        <div class="fact"><span class="fact__label">Элемент</span><span class="fact__value"><span class="green">Тыква</span> — валюта и навигатор</span></div>
+        <div class="fact"><span class="fact__label">Жанр</span><span class="fact__value">Аркадная гонка / симулятор руля</span></div>
+        <div class="fact"><span class="fact__label">Статус</span><span class="fact__value"><span class="green">Доступна онлайн</span></span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="play">
+    <div class="container">
+      <h2 class="section__title"><span class="section__num">00</span> Играть</h2>
+      <p class="section__lead">Веб-версия игры прямо на странице — жми «Играть» и крути руль.</p>
+
+      <div class="play-frame">
+        <iframe
+          src="https://naspeh.tech/games/xzxslava/dev"
+          title="Крутой поворот — играть онлайн"
+          allow="autoplay; fullscreen; gamepad; pointer-lock; keyboard"
+          loading="lazy"></iframe>
+      </div>
+
+      <div class="play-note">
+        <span>🕹 Управление: <b>A / D</b> или стрелки, <b>ЛКМ + движение мыши</b>, <b>Esc</b> — пауза.</span>
+        <a href="https://naspeh.tech/games/xzxslava/dev" target="_blank" rel="noopener" class="btn btn--small btn--ghost">↗ Открыть в новой вкладке</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="about">
+    <div class="container prose">
+      <h2 class="section__title"><span class="section__num">01</span> Об игре</h2>
+      <div class="quote">
+        «Ты — не пилот, а оператор руля. Автомобиль несётся на автопилоте, камеры наблюдения переключают ракурсы, а твоя задача — вовремя и в правильную сторону крутить руль.»
+      </div>
+
+      <p>
+        <strong>«Крутой поворот»</strong> — это гоночная аркада, созданная командой <strong>ЗамороJAMные</strong>
+        за 72 часа на <strong>Siberian Game Jam 2026</strong>. Тема джема — «Камеры наблюдения».
+        Встроенный элемент — <strong>тыква</strong> — работает как валюта для разблокировки новых рулей
+        и как навигатор по идеальной траектории на трассе.
+      </p>
+      <p>
+        Механика необычная: никакого газа и тормоза. Машина движется сама, а игрок отвечает только
+        за вращение руля. Камеры наблюдения автоматически меняют ракурсы, поэтому нужно быстро
+        сообразить, в какую сторону поворачивать. Тыквы вдоль трассы подсказывают траекторию и
+        приносят очки — за них можно выбрать новый руль в меню настроек.
+      </p>
+
+      <h3>🎮 Как играть</h3>
+      <div class="loop">
+        <div class="loop__step">
+          <h4>🚗 Машина едет сама</h4>
+          <p>Автопилот ведёт авто по трассе — тебе остаётся только руль.</p>
+        </div>
+        <div class="loop__step">
+          <h4>📹 Камера меняется</h4>
+          <p>Наблюдательные камеры переключают ракурс — ориентируйся быстро.</p>
+        </div>
+        <div class="loop__step">
+          <h4>🎃 Следи за тыквами</h4>
+          <p>Оранжевые тыквы показывают идеальную траекторию и дают очки.</p>
+        </div>
+        <div class="loop__step">
+          <h4>🔧 Меняй руль</h4>
+          <p>За собранные тыквы разблокируй новые рули в разделе выбора.</p>
+        </div>
+      </div>
+
+      <h3>🎛 Управление</h3>
+      <ul>
+        <li><strong>A / D или Стрелки влево / вправо</strong> — вращение руля.</li>
+        <li><strong>ЛКМ + движение мыши</strong> — альтернативное управление рулём.</li>
+        <li><strong>ПАУЗА</strong> — останови гонку в любой момент.</li>
+      </ul>
+
+      <h3>✨ Фишки</h3>
+      <ul>
+        <li><strong>Ты — руль</strong> — никакого газа, только чистая реакция и чувство поворота.</li>
+        <li><strong>Авто-камеры</strong> — ракурс постоянно меняется, и нужно быстро сообразить направление.</li>
+        <li><strong>Тыквы-навигаторы</strong> — подсказывают траекторию и служат валютой для новых рулей.</li>
+        <li><strong>Мягкие ошибки</strong> — столкнулся или не успел? Машина респавнится, теряешь пару тыкв — заезд не провален.</li>
+        <li><strong>Аркадный стиль</strong> — яркий снежный low-poly, оранжевые акценты, динамичный звук мотора.</li>
+        <li><strong>Меню разработчиков</strong> — команда с любовью и бессонными ночами.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section section--alt" id="gallery">
+    <div class="container">
+      <h2 class="section__title"><span class="section__num">02</span> Скриншоты</h2>
+      <p class="section__lead">Нажми на скриншот, чтобы увеличить.</p>
+      <div class="gallery">
+        <figure class="shot" onclick="openLightbox(this)">
+          <img src="../../images/turn-01-hero.png" alt="Главный арт Крутой поворот">
+          <figcaption class="shot__caption">Главный арт — машина, тыквы и камера наблюдения</figcaption>
+        </figure>
+        <figure class="shot" onclick="openLightbox(this)">
+          <img src="../../images/turn-02-menu.png" alt="Главное меню игры Крутой поворот">
+          <figcaption class="shot__caption">Главное меню — «ИГРАТЬ», выбор руля, разработчики</figcaption>
+        </figure>
+        <figure class="shot" onclick="openLightbox(this)">
+          <img src="../../images/turn-03-credits.png" alt="Разработчики игры">
+          <figcaption class="shot__caption">Команда ЗамороJAMные — разработчики джема</figcaption>
+        </figure>
+        <figure class="shot" onclick="openLightbox(this)">
+          <img src="../../images/turn-04-wheel-select.png" alt="Выбор руля">
+          <figcaption class="shot__caption">Выбор руля — разблокируй новые рули за тыквы</figcaption>
+        </figure>
+        <figure class="shot" onclick="openLightbox(this)">
+          <img src="../../images/turn-05-gameplay.png" alt="Геймплей Крутой поворот">
+          <figcaption class="shot__caption">Геймплей — снежная трасса, машина на автопилоте, таймер и счёт</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="team">
+    <div class="container">
+      <h2 class="section__title"><span class="section__num">03</span> Команда</h2>
+      <div class="team-grid">
+        <div class="member">
+          <div class="member__name">Никита Григорьев</div>
+          <div class="member__role">3D-художник</div>
+        </div>
+        <div class="member">
+          <div class="member__name">Оля Лунев</div>
+          <div class="member__role">2D-художник</div>
+        </div>
+        <div class="member">
+          <div class="member__name">Егор Пеханов</div>
+          <div class="member__role">Программист</div>
+        </div>
+        <div class="member">
+          <div class="member__name">Казов Вячеслав</div>
+          <div class="member__role">Геймдизайнер</div>
+        </div>
+        <div class="member">
+          <div class="member__name">Антон Кармацкий</div>
+          <div class="member__role">Музыкант</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--alt" id="download">
+    <div class="container">
+      <h2 class="section__title"><span class="section__num">04</span> Скачать</h2>
+
+      <div class="dl-box">
+        <div>
+          <h3>⬇ Крутой поворот — сборка</h3>
+          <p>
+            Игра опубликована на официальной странице проекта. Нажми кнопку — откроется
+            страница naspeh.tech, откуда можно скачать сборку или сразу запустить игру в браузере.
+          </p>
+        </div>
+        <div class="dl-box__btns">
+          <a href="https://naspeh.tech/games/xzxslava/dev" target="_blank" rel="noopener" class="btn btn--primary">⬇ Скачать игру</a>
+          <a href="#play" class="btn btn--ghost">🎮 Играть на сайте</a>
+          <span class="dl-box__hint">naspeh.tech · веб-версия · бесплатно</span>
+        </div>
+      </div>
+
+      <p style="margin-top: 16px; font-size: 13.5px; color: var(--muted);">
+        💡 Если нужен отдельный файл для Windows (.zip / .exe) — скинь ссылку на него,
+        и я заменю кнопку на прямое скачивание, как у «Фермы».
+      </p>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container footer__inner">
+      <span>© 2026 <strong>gogoweru</strong> — портфолио разработчика игр</span>
+      <span class="footer__hint">Команда ЗамороJAMные · Siberian Game Jam 2026</span>
+    </div>
+  </footer>
+
+  <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+    <img id="lightbox-img" src="" alt="Скриншот во весь экран">
+  </div>
+
+  <script src="../../js/main.js"></script>
+</body>
+</html>

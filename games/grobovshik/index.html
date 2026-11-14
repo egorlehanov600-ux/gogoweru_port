@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Гробовщик — кладбище забытых мемов · gogoweru</title>
+  <meta name="description" content="«Гробовщик» (Кладбище забытых мемов) от gogoweru и команды ЗамороJAMные: копай могилы, убивай мемы (+10 лайков) или оживляй (−15), пошаговые карточные бои. Скачать игру.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E⚰️%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="../../css/style.css">
+  <style>
+    .game-hero {
+      padding: 70px 0 50px;
+      background:
+        radial-gradient(800px 380px at 10% -10%, rgba(168, 85, 247, .16), transparent 60%),
+        radial-gradient(700px 380px at 90% 10%, rgba(126, 217, 87, .08), transparent 60%),
+        var(--bg);
+      border-bottom: 1px solid var(--border);
+    }
+    .breadcrumbs { display: flex; gap: 8px; color: var(--muted); font-size: 14px; margin-bottom: 22px; flex-wrap: wrap; }
+    .breadcrumbs a:hover { color: var(--purple-bright); }
+    .breadcrumbs span { opacity: .5; }
+    .game-hero__title { font-size: clamp(34px, 6vw, 62px); font-weight: 900; letter-spacing: 4px; line-height: 1.05; margin-bottom: 8px; }
+    .game-hero__sub { color: var(--purple-bright); font-weight: 700; text-transform: uppercase; letter-spacing: 3px; font-size: 14px; margin-bottom: 22px; }
+    .game-hero__lead { color: var(--muted); font-size: 18px; max-width: 720px; margin-bottom: 28px; }
+    .game-hero__actions { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 34px; }
+    .facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 14px; max-width: 880px; }
+    .fact { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; }
+    .fact__label { display: block; color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 4px; }
+    .fact__value { font-weight: 800; font-size: 16px; }
+    .fact__value .purple { color: var(--purple-bright); }
+    .fact__value .orange { color: var(--carrot); }
+    .fact__value .green { color: var(--green); }
+
+    .prose { max-width: 760px; }
+    .prose h3 { font-size: 22px; margin: 34px 0 12px; display: flex; align-items: center; gap: 10px; }
+    .prose p { color: var(--muted); margin-bottom: 14px; font-size: 16px; }
+    .prose ul { list-style: none; display: grid; gap: 10px; margin-bottom: 16px; }
+    .prose li { color: var(--muted); padding-left: 28px; position: relative; font-size: 15.5px; }
+    .prose li::before { content: "🪦"; position: absolute; left: 0; top: 0; }
+    .prose strong { color: var(--text); }
+    .quote {
+      border-left: 4px solid var(--purple);
+      background: rgba(168, 85, 247, .08);
+      padding: 16px 20px; border-radius: 0 12px 12px 0;
+      color: var(--text); font-size: 16px; margin: 22px 0;
+    }
+    .ps-note {
+      background: var(--surface-2);
+      border: 1px dashed var(--border);
+      border-radius: 12px;
+      padding: 14px 18px;
+      color: var(--muted);
+      font-size: 14.5px;
+      margin: 22px 0;
+    }
+    .ps-note strong { color: var(--purple-bright); }
+
+    .loop { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 16px; counter-reset: step; }
+    .loop__step { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 20px 18px 18px; position: relative; counter-increment: step; }
+    .loop__step::before {
+      content: counter(step);
+      position: absolute; top: -14px; left: 16px;
+      width: 30px; height: 30px; border-radius: 50%;
+      background: var(--purple); color: #fff;
+      font-weight: 900; display: grid; place-items: center; font-size: 15px;
+      box-shadow: 0 4px 12px rgba(168, 85, 247, .4);
+    }
+    .loop__step h4 { font-size: 15.5px; margin: 6px 0 6px; }
+    .loop__step p { color: var(--muted); font-size: 13.5px; }
+
+    .gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+    .shot { position: relative; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border); background: var(--surface); cursor: zoom-in; transition: transform .2s ease, border-color .2s ease; }
+    .shot:hover { transform: translateY(-4px); border-color: var(--purple); }
+    .shot img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; }
+    .shot__caption { position: absolute; inset: auto 0 0 0; padding: 26px 16px 12px; background: linear-gradient(transparent, rgba(8, 4, 12, .92)); font-size: 13.5px; font-weight: 600; color: var(--text); }
+
+    .dl-box {
+      display: grid; grid-template-columns: 1fr auto; gap: 26px; align-items: center;
+      background: linear-gradient(145deg, var(--surface), var(--surface-2));
+      border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 30px 32px; box-shadow: var(--shadow); max-width: 900px;
+    }
+    .dl-box h3 { font-size: 22px; margin-bottom: 8px; }
+    .dl-box p { color: var(--muted); font-size: 15px; }
+    .dl-box__btns { display: flex; flex-direction: column; gap: 12px; min-width: 260px; }
+    .dl-box__hint { text-align: center; color: var(--purple-bright); font-size: 13px; font-weight: 700; }
+
+    .team { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin-top: 8px; }
+    .team__member { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px; }
+    .team__member b { display: block; font-size: 15.5px; margin-bottom: 4px; }
+    .team__member span { color: var(--muted); font-size: 13.5px; }
+
+    .lightbox { position: fixed; inset: 0; background: rgba(8, 4, 12, .92); display: none; align-items: center; justify-content: center; z-index: 100; padding: 4vh 4vw; cursor: zoom-out; }
+    .lightbox.open { display: flex; }
+    .lightbox img { max-width: 100%; max-height: 90vh; border-radius: 12px; border: 1px solid var(--border); box-shadow: var(--shadow); }
+
+    @media (max-width: 760px) {
+      .dl-box { grid-template-columns: 1fr; }
+      .dl-box__btns { min-width: 0; }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="container header__inner">
+      <a href="../../index.html" class="logo">
+        <span class="logo__icon">⚰️</span>
+        <span class="logo__text">gogoweru</span>
+      </a>
+      <nav class="nav" id="nav">
+        <a href="../../index.html#games" class="nav__link">Игры</a>
+        <a href="../../index.html#about" class="nav__link">Обо мне</a>
+        <a href="../../index.html#contacts" class="nav__link">Контакты</a>
+      </nav>
+      <button class="burger" id="burger" aria-label="Меню"><span></span><span></span><span></span></button>
+    </div>
+  </header>
+
+  <section class="game-hero">
+    <div class="container">
+      <nav class="breadcrumbs">
+        <a href="../../index.html">Главная</a><span>/</span>
+        <a href="../../index.html#games">Игры</a><span>/</span>
+        <b style="color:var(--text)">Гробовщик</b>
+      </nav>
+
+      <h1 class="game-hero__title">ГРОБОВЩИК</h1>
+      <p class="game-hero__sub">Кладбище забытых мемов · пошаговые бои · команда</p>
+      <p class="game-hero__lead">
+        Старое кладбище, таймер и счётчик могил. Копай могилы, находишь мемов —
+        и решай: <strong>убить (+10 лайков)</strong> или <strong>оживить (−15 в пул)</strong>.
+        Дальше — пошаговые карточные бои, прокачка через дубликаты и коллекция мемов.
+      </p>
+
+      <div class="game-hero__actions">
+        <a href="Grobovshik-Windows.zip" download class="btn btn--primary">⬇ Скачать игру</a>
+        <a href="https://disk.yandex.ru/d/25T04uM5c0cHJQ" target="_blank" rel="noopener" class="btn btn--ghost">💾 Яндекс Диск</a>
+        <a href="#gallery" class="btn btn--ghost">📸 Галерея</a>
+        <a href="#about" class="btn btn--ghost">📖 Описание</a>
+      </div>
+
+      <div class="facts">
+        <div class="fact"><span class="fact__label">Жанр</span><span class="fact__value">Пошаговая стратегия · карты</span></div>
+        <div class="fact"><span class="fact__label">Платформа</span><span class="fact__value">Windows <span class="purple">PC</span></span></div>
+        <div class="fact"><span class="fact__label">Команда</span><span class="fact__value"><span class="purple">ЗамороJAMные</span></span></div>
+        <div class="fact"><span class="fact__label">Размер файла</span><span class="fact__value"><span class="orange">68 МБ</span> (zip)</span></div>
+        <div class="fact"><span class="fact__label">Валюта</span><span class="fact__value"><span class="green">Лайки</span> · убить +10 / оживить −15</span></div>
+        <div class="fact"><span class="fact__label">Статус</span><span class="fact__value"><span class="purple">Скачать и играть</span></span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="about">
+    <div class="container prose">
+      <h2 class="section__title"><span class="section__num">01</span> Об игре</h2>
+
+      <div class="quote">
+        «Убить — +10 лайков. Оживить — −15 в пул. Выбор за тобой, гробовщик.»
+      </div>
+
+      <p>
+        <strong>«Гробовщик»</strong> — игра про Старое кладбище, где каждая могила
+        скрывает мема. Ты копаешь (<strong>держи E</strong>), находишь забытый мем —
+        и встаёшь перед дилеммой: <strong>убить — получить +10 лайков</strong> или
+        <strong>оживить — отдать −15 лайков в пул</strong>. Лайки — твоя валюта:
+        таймер и счётчик могил держат темп, HUD показывает, сколько могил осталось.
+      </p>
+      <p>
+        После выбора начинаются <strong>пошаговые карточные бои</strong>: атака,
+        защита, способности — ход за ходом, пока босс не повержен
+        («Босс повержен!»). Боссы предупреждают о своих замахах:
+        <em>«Атака…»</em>, <em>«Копит силы…»</em>, <em>«Тяжёлый удар…»</em>,
+        <em>«Обрушение…»</em> — читай телеграфы и отвечай вовремя.
+      </p>
+      <p>
+        Прокачка — через <strong>дубликаты</strong>: «Дубликат X (N коп.)» копятся
+        в коллекцию (<strong>TAB</strong>), копии можно <strong>сжечь за лайки</strong>,
+        а в настройках — даже <strong>стиль надгробий</strong> и громкость
+        музыки, эффектов, UI и амбиента. Мемов в коллекции пока маловато —
+        команда знает.
+      </p>
+
+      <div class="ps-note">
+        <strong>P.S.</strong> Мемов маловато в игре — но это исправимо: коллекция растёт обновлениями.
+      </div>
+
+      <h3>🎮 Игровой цикл</h3>
+      <div class="loop">
+        <div class="loop__step">
+          <h4>🕳 Копай могилу</h4>
+          <p>Держи E — и доставай забытый мем из-под земли.</p>
+        </div>
+        <div class="loop__step">
+          <h4>⚖️ Дилемма</h4>
+          <p>1. Убить (+10 лайков) или 2. Оживить (−15 в пул).</p>
+        </div>
+        <div class="loop__step">
+          <h4>🃏 Карточный бой</h4>
+          <p>Пошаговый бой с боссом: читай телеграфы и бей ходом.</p>
+        </div>
+        <div class="loop__step">
+          <h4>🧬 Прокачка дубликатами</h4>
+          <p>Дубликаты копятся — жги лишние копии за лайки.</p>
+        </div>
+        <div class="loop__step">
+          <h4>📚 Коллекция (TAB)</h4>
+          <p>Все пойманные мемы — в коллекции, стиль надгробий — в настройках.</p>
+        </div>
+      </div>
+
+      <h3>🕹 Управление</h3>
+      <ul>
+        <li><strong>E (удерживать)</strong> — копать могилу.</li>
+        <li><strong>1 / 2</strong> — выбор в дилемме: убить (+10) / оживить (−15).</li>
+        <li><strong>TAB</strong> — коллекция мемов.</li>
+        <li><strong>Мышь и клавиши боя</strong> — ходы в карточном бою.</li>
+        <li><strong>Esc</strong> — настройки: музыка, SFX, UI, амбиент, стиль надгробий.</li>
+      </ul>
+
+      <h3>✨ Что внутри</h3>
+      <ul>
+        <li><strong>Моральный выбор</strong> — убить (+10) или оживить (−15) на каждом меме.</li>
+        <li><strong>Пошаговые карточные бои</strong> — боссы с телеграфами атак.</li>
+        <li><strong>Прокачка дубликатами</strong> — копии, сжигание за лайки, редкость.</li>
+        <li><strong>Коллекция мемов</strong> — TAB, счётчик «Мемов в коллекции».</li>
+        <li><strong>Кладбищенский HUD</strong> — таймер, «Старое кладбище», могил X/25, лайки.</li>
+        <li><strong>Настройки</strong> — громкость музыки, SFX, UI, амбиента + стиль надгробий.</li>
+      </ul>
+
+      <h3>👥 Команда</h3>
+      <p>Игра сделана командой <strong>ЗамороJAMные</strong>:</p>
+      <div class="team">
+        <div class="team__member"><b>Никита Григорьев</b><span>3D</span></div>
+        <div class="team__member"><b>Оля Лунева</b><span>2D</span></div>
+        <div class="team__member"><b>Егор Пеханов</b><span>Программист</span></div>
+        <div class="team__member"><b>Казов Вячеслав</b><span>Геймдизайнер</span></div>
+        <div class="team__member"><b>Антон Кармацкий</b><span>Музыкант</span></div>
+      </div>
+      <p style="margin-top:12px"><em>Состав уточняется — поправлю, как скажешь.</em></p>
+
+      <h3>🖥 Как запустить</h3>
+      <ul>
+        <li>Скачай архив <strong>Grobovshik-Windows.zip</strong> (68 МБ) кнопкой выше.</li>
+        <li>Распакуй в любую папку (внутри папка <strong>Гробовщик</strong>).</li>
+        <li>Запусти <strong>Гробовщик\Гробовщик.exe</strong>.</li>
+      </ul>
+      <p><strong>Требования:</strong> Windows 10/11 (64-bit), любой современный ПК. Интернет не нужен.</p>
+    </div>
+  </section>
+
+  <section class="section section--alt" id="gallery">
+    <div class="container">
+      <h2 class="section__title"><span class="section__num">02</span> Галерея</h2>
+      <p class="section__lead">Обложка, геймплей на Старом кладбище и дилемма «БУБ».</p>
+      <div class="gallery">
+        <figure class="shot" onclick="openLightbox(this)">
+          <img src="../../images/grob-01-hero.png" alt="Гробовщик — кладбище забытых мемов, обложка">
+          <figcaption class="shot__caption">Обложка — Гробовщик: кладбище забытых мемов</figcaption>
+        </figure>
+        <figure class="shot" onclick="openLightbox(this)">
+          <img src="../../images/grob-02-gameplay.png" alt="Геймплей: Старое кладбище, могилы 22/25, лайки 15">
+          <figcaption class="shot__caption">Старое кладбище — таймер, могилы и лайки</figcaption>
+        </figure>
+        <figure class="shot" onclick="openLightbox(this)">
+          <img src="../../images/grob-03-choice.png" alt="Дилемма: БУБ — убить (+10) или оживить (−15)">
+          <figcaption class="shot__caption">Дилемма БУБ — убить (+10) или оживить (−15)</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="download">
+    <div class="container">
+      <h2 class="section__title"><span class="section__num">03</span> Скачать</h2>
+      <div class="dl-box">
+        <div>
+          <h3>⬇ Grobovshik-Windows.zip</h3>
+          <p>
+            Полный билд для Windows: распакуй архив и запусти
+            <code>Гробовщик/Гробовщик.exe</code>. Тот же файл лежит на Яндекс Диске.
+          </p>
+        </div>
+        <div class="dl-box__btns">
+          <a href="Grobovshik-Windows.zip" download class="btn btn--primary">⬇ Скачать с сайта · 68 МБ</a>
+          <a href="https://disk.yandex.ru/d/25T04uM5c0cHJQ" target="_blank" rel="noopener" class="btn btn--ghost">💾 Открыть на Яндекс Диске</a>
+          <span class="dl-box__hint">ZIP · Windows · команда ЗамороJAMные</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container footer__inner">
+      <span>© 2026 <strong>gogoweru</strong> — портфолио разработчика игр</span>
+      <span class="footer__hint">Игра «Гробовщик» · команда ЗамороJAMные</span>
+    </div>
+  </footer>
+
+  <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+    <img id="lightbox-img" src="" alt="Скриншот во весь экран">
+  </div>
+
+  <script src="../../js/main.js"></script>
+</body>
+</html>
